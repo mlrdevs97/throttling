@@ -1,0 +1,16 @@
+services:
+  server:
+    build:
+      context: ./throttling-api
+    container_name: throttling-api
+    ports:
+      - "8888:8080"
+
+  client:
+    build:
+      context: ./throttling-app
+    container_name: throttling-app
+    ports:
+      - "88:80"
+    depends_on:
+      - server
