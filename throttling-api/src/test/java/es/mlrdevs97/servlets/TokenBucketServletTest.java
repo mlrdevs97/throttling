@@ -95,12 +95,13 @@ class TokenBucketServletTest {
         void whenParamsMissing_shouldReturnBadRequest() throws IOException {
             // Arrange
             when(req.getParameter("capacity")).thenReturn(null);
-            when(req.getParameter("capacity")).thenReturn(null);
+            when(req.getParameter("refillRate")).thenReturn(null);
 
             // Act
             servlet.doPost(req, res);
 
             // Assert
+            verify(res).setStatus(SC_BAD_REQUEST);
             assertTrue(stringWriter.toString().contains("Missing 'capacity' or 'refillRate' parameters."));
         }
 
@@ -114,6 +115,7 @@ class TokenBucketServletTest {
             servlet.doPost(req, res);
 
             // Assert
+            verify(res).setStatus(SC_BAD_REQUEST);
             assertTrue(stringWriter.toString().contains("Missing 'capacity' or 'refillRate' parameters."));
         }
 
@@ -127,6 +129,7 @@ class TokenBucketServletTest {
             servlet.doPost(req, res);
 
             // Assert
+            verify(res).setStatus(SC_BAD_REQUEST);
             assertTrue(stringWriter.toString().contains("Invalid 'capacity' or 'refillRate' format. Must be numbers."));
         }
 
@@ -140,6 +143,7 @@ class TokenBucketServletTest {
             servlet.doPost(req, res);
 
             // Assert
+            verify(res).setStatus(SC_BAD_REQUEST);
             assertTrue(stringWriter.toString().contains("Invalid 'capacity' or 'refillRate' value. Must be valid positive numbers."));
         }
 
