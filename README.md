@@ -112,17 +112,26 @@ throttling/
 │   │       ├── servlets/
 │   │       │   ├── TokenBucketServlet.java
 │   │       │   └── LeakyBucketServlet.java
-│   │       └── throttling/
-│   │           ├── TokenBucket.java
-│   │           └── LeakyBucket.java
+│   │       ├── throttling/
+│   │       │   ├── TokenBucket.java
+│   │       │   └── LeakyBucket.java
+│   │       └── filters/
+│   │           └── CORSFilter.java
+│   ├── src/main/webapp/WEB-INF/
+│   │   └── web.xml
 │   └── Dockerfile
 ├── throttling-app/          # Frontend web application
-│   ├── index.html           # Algorithm selection page
-│   ├── index.css            # Styling for selection page
-│   ├── index.js             # Selection page functionality
-│   ├── visualizer.html      # Generic algorithm visualizer
-│   ├── visualizer.css       # Visualizer styling
-│   ├── visualizer.js        # Generic visualizer functionality
+│   ├── src/
+│   │   ├── html/            # HTML files
+│   │   │   ├── index.html   # Algorithm selection page
+│   │   │   └── visualizer.html # Generic algorithm visualizer
+│   │   ├── CSS/             # Stylesheets
+│   │   │   ├── index.css    # Styling for selection page
+│   │   │   └── visualizer.css # Visualizer styling
+│   │   └── JS/              # JavaScript files
+│   │       ├── index.js     # Selection page functionality
+│   │       └── visualizer.js # Generic visualizer functionality
+│   ├── nginx.conf           # Nginx configuration
 │   └── Dockerfile
 └── docker-compose.yml       # Container orchestration
 ```
@@ -138,11 +147,12 @@ throttling/
 
 ### Frontend Architecture
 - **Algorithm Selection**: Dynamic UI that adapts to the selected algorithm
-- **Generic Visualizer**: Single page that works with multiple algorithms@throttling.js
+- **Generic Visualizer**: Single page that works with multiple algorithms
 - **Vanilla JavaScript**: No framework dependencies for simplicity
 - **Real-Time Updates**: Client-side simulation synchronized with server state
 - **Responsive Design**: Modern CSS with Inter font family
 - **Visual Feedback**: Color-coded logging and animated visualizations
+- **Organized Structure**: Modular file organization with separate HTML, CSS, and JS directories
 
 ### Key Technical Features
 - **Multi-Algorithm Support**: Extensible architecture for adding new algorithms
