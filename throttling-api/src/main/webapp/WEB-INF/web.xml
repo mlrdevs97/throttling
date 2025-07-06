@@ -10,7 +10,7 @@
 
     <filter>
         <filter-name>CORSFilter</filter-name>
-        <filter-class>es.mlrdevs97.filters.CORSFilter</filter-class> </filter>
+        <filter-class>es.mlrdevs97.shared.filters.CORSFilter</filter-class> </filter>
     <filter-mapping>
         <filter-name>CORSFilter</filter-name>
         <url-pattern>/token-bucket</url-pattern>
@@ -20,9 +20,17 @@
         <servlet-name>TokenBucketServlet</servlet-name>
         <servlet-class>es.mlrdevs97.servlets.TokenBucketServlet</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>TokenBucketServlet</servlet-name>
         <url-pattern>/token-bucket</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>LeakyBucketServlet</servlet-name>
+        <servlet-class>es.mlrdevs97.servlets.TokenBucketServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LeakyBucketServlet</servlet-name>
+        <url-pattern>/leaky-bucket</url-pattern>
     </servlet-mapping>
 </web-app>
