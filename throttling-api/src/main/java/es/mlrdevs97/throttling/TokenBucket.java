@@ -27,11 +27,12 @@ public class TokenBucket {
      */
     public synchronized boolean tryConsume() {
         refill();
-        if (currentTokens > 0) {
-            currentTokens--;
-            return true;
+        if (currentTokens <= 0) {
+            return false;
         }
-        return false;
+
+        currentTokens--;
+        return true;
     }
 
     public synchronized long getCurrentTokens() {
@@ -45,13 +46,16 @@ public class TokenBucket {
     private void refill() {
         long now = System.currentTimeMillis();
         long timeElapsed = now - lastRefillTime;
-
-        if (timeElapsed > 0) {
-            long tokensToAdd = (timeElapsed * REFILL_RATE) / 1000;
-            if (tokensToAdd > 0) {
-                this.currentTokens = Math.min(CAPACITY, this.currentTokens + tokensToAdd);
-                this.lastRefillTime = now;
-            }
+        if (timeElapsed <= 0) {
+            return;
         }
+
+        long tokensToAdd = (timeElapsed * REFILL_RATE) / 1000;
+        if (tokensToAdd <= 0) {
+            return;
+        }
+
+        this.currentTokens = Math.min(CAPACITY, this.currentTokens + tokensToAdd);
+        this.lastRefillTime = now;
     }
 }

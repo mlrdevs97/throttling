@@ -120,9 +120,10 @@ class TokenBucketTest {
             thread.join();
         }
         long testEnd = System.currentTimeMillis();
+        long timeElapsed = testEnd - testStart;
 
         // Assert
         assertTrue(grantedAccess[0] >= 0);
-        assertTrue(grantedAccess[0] <= (REFILL_RATE * (testEnd - testStart)));
+        assertTrue(grantedAccess[0] <= (REFILL_RATE * timeElapsed));
     }
 }
