@@ -1,40 +1,46 @@
-# Token Bucket Throttling Visualizer
+# Throttling Algorithm Visualizer
 
-A interactive web application that demonstrates **throttling** concepts through a visual implementation of the **Token Bucket Algorithm**. This educational tool allows users to configure bucket parameters and observe real-time token consumption and refill behavior.
+An interactive web application that demonstrates **throttling** concepts through visual implementations of multiple rate limiting algorithms. This educational tool allows users to compare different throttling strategies and observe their real-time behavior.
 
 ## 🎯 Purpose
 
-This application serves as a visual learning tool to understand rate limiting and throttling mechanisms. While currently focused on the Token Bucket algorithm, it's designed to be expanded with other throttling algorithms in the future.
+This application serves as a comprehensive visual learning tool to understand rate limiting and throttling mechanisms. It currently supports **Token Bucket** and **Leaky Bucket** algorithms, with an extensible architecture for adding more algorithms in the future.
 
 ## 🧠 What is Throttling?
 
 **Throttling** is a technique used to control the rate at which requests are processed by a system. It prevents resource exhaustion and ensures fair usage by limiting the number of operations that can be performed within a specific time window.
 
-### Token Bucket Algorithm
+### Supported Algorithms
 
-The **Token Bucket Algorithm** is a popular rate limiting strategy that works as follows:
-
+#### Token Bucket Algorithm
 - **Bucket**: A container with a fixed capacity that holds tokens
 - **Tokens**: Represent permission to perform an operation
 - **Refill Rate**: Tokens are added to the bucket at a constant rate
 - **Consumption**: Each request consumes one token; requests are denied when the bucket is empty
+- **Behavior**: Allows burst traffic (up to bucket capacity) while maintaining an average rate over time
 
-This algorithm allows for burst traffic (up to bucket capacity) while maintaining an average rate over time.
+#### Leaky Bucket Algorithm
+- **Queue**: A container with a fixed capacity that holds requests
+- **Requests**: Incoming requests are added to the queue
+- **Leak Rate**: Requests are processed (leaked) from the queue at a constant rate
+- **Overflow**: When the queue is full, new requests are dropped
+- **Behavior**: Smooths out traffic by processing requests at a steady rate
 
 ## 🚀 Features
 
 ### Backend (Java Servlet API)
-- **Token Bucket Implementation**: Hand-crafted algorithm with configurable capacity and refill rate
-- **RESTful API**: Simple endpoints for configuration and token consumption
+- **Multiple Algorithm Support**: Token Bucket and Leaky Bucket implementations
 - **Thread-Safe**: Synchronized operations for concurrent access
-- **JSON Responses**: Structured API responses with status and token information
+- **RESTful API**: Simple endpoints for configuration and request processing
+- **JSON Responses**: Structured API responses with status and algorithm-specific information
 
 ### Frontend (Interactive Web UI)
-- **Real-Time Visualization**: Dynamic token bucket fill level representation
-- **Configuration Panel**: Live parameter adjustment (capacity, refill rate)
-- **Request Simulation**: Single-click token consumption testing
+- **Algorithm Selection**: Choose between Token Bucket and Leaky Bucket
+- **Real-Time Visualization**: Dynamic visual representation of algorithm state
+- **Configuration Panel**: Live parameter adjustment for each algorithm
+- **Request Simulation**: Interactive testing of algorithm behavior
 - **Activity Logging**: Comprehensive request/response logging with timestamps
-- **Status Monitoring**: Current token count and last refill time display
+- **Responsive Design**: Modern UI that works on all devices
 
 ## 🏃 How to Run
 
@@ -61,7 +67,9 @@ The application will start two services:
 
 ## 🔧 API Endpoints
 
-### Configure Token Bucket
+### Token Bucket API
+
+#### Configure Token Bucket
 ```http
 POST /token-bucket
 Content-Type: application/x-www-form-urlencoded
@@ -69,19 +77,30 @@ Content-Type: application/x-www-form-urlencoded
 capacity=10&refillRate=2
 ```
 
-**Parameters:**
-- `capacity`: Maximum number of tokens (positive integer)
-- `refillRate`: Tokens added per second (positive integer)
-
-### Consume Token
+#### Consume Token
 ```http
 GET /token-bucket
 ```
 
-**Responses:**
-- `200 OK`: Token consumed successfully
-- `400 Bad Request`: Bucket not configured
-- `429 Too Many Requests`: No tokens available (throttled)
+### Leaky Bucket API
+
+#### Configure Leaky Bucket
+```http
+POST /leaky-bucket
+Content-Type: application/x-www-form-urlencoded
+
+capacity=10&leakRate=2
+```
+
+#### Add Request to Queue
+```http
+GET /leaky-bucket
+```
+
+### Response Codes
+- `200 OK`: Request processed successfully
+- `400 Bad Request`: Algorithm not configured or invalid parameters
+- `429 Too Many Requests`: Request throttled (no tokens available or queue full)
 
 ## 📁 Project Structure
 
@@ -91,14 +110,19 @@ throttling/
 │   ├── src/main/java/
 │   │   └── es/mlrdevs97/
 │   │       ├── servlets/
-│   │       │   └── TokenBucketServlet.java
+│   │       │   ├── TokenBucketServlet.java
+│   │       │   └── LeakyBucketServlet.java
 │   │       └── throttling/
-│   │           └── TokenBucket.java
+│   │           ├── TokenBucket.java
+│   │           └── LeakyBucket.java
 │   └── Dockerfile
 ├── throttling-app/          # Frontend web application
-│   ├── throttling.html      # Main UI
-│   ├── throttling.css       # Styling
-│   ├── throttling.js        # Interactive functionality
+│   ├── index.html           # Algorithm selection page
+│   ├── index.css            # Styling for selection page
+│   ├── index.js             # Selection page functionality
+│   ├── visualizer.html      # Generic algorithm visualizer
+│   ├── visualizer.css       # Visualizer styling
+│   ├── visualizer.js        # Generic visualizer functionality
 │   └── Dockerfile
 └── docker-compose.yml       # Container orchestration
 ```
@@ -107,37 +131,46 @@ throttling/
 
 ### Backend Architecture
 - **Servlet-based**: Lightweight Java EE servlet container
-- **Thread-Safe Token Bucket**: Synchronized methods prevent race conditions
-- **Time-Based Refilling**: Calculates token addition based on elapsed time
+- **Algorithm Implementations**: Separate classes for each throttling algorithm
+- **Thread-Safe Operations**: Synchronized methods prevent race conditions
+- **Time-Based Calculations**: Accurate token refill and request leak calculations
 - **Error Handling**: Comprehensive validation and error responses
 
 ### Frontend Architecture
+- **Algorithm Selection**: Dynamic UI that adapts to the selected algorithm
+- **Generic Visualizer**: Single page that works with multiple algorithms@throttling.js
 - **Vanilla JavaScript**: No framework dependencies for simplicity
-- **Real-Time Updates**: Periodic token refill simulation
+- **Real-Time Updates**: Client-side simulation synchronized with server state
 - **Responsive Design**: Modern CSS with Inter font family
-- **Visual Feedback**: Color-coded logging and animated token fill
+- **Visual Feedback**: Color-coded logging and animated visualizations
 
 ### Key Technical Features
-- **Synchronization**: Server-side token count synchronization after each request
-- **Visual Representation**: Percentage-based token bucket fill animation
-- **Client-Side Simulation**: Local token refill calculation between server requests
-- **Error Handling**: Network error detection and user feedback
-- **Logging**: Timestamped activity log with request/response details
+- **Multi-Algorithm Support**: Extensible architecture for adding new algorithms
+- **Server Synchronization**: Client state synchronized with server after each request
+- **Visual Differentiation**: Different colors and behaviors for each algorithm
+- **Parameter Validation**: Client and server-side validation of algorithm parameters
+- **Error Handling**: Comprehensive network error detection and user feedback
 
 ## 🎮 How to Use
 
-1. **Configure the Bucket**: Set capacity and refill rate, then click "Configure Bucket"
-2. **Monitor Status**: Watch the visual token bucket and current token count
-3. **Send Requests**: Click "Send Single Request" to consume tokens
-4. **Observe Behavior**: See how tokens are consumed and refilled over time
-5. **Experiment**: Try different configurations to understand rate limiting behavior
+1. **Select Algorithm**: Choose between Token Bucket or Leaky Bucket from the main page
+2. **Configure Parameters**: Set capacity and rate values for your selected algorithm
+3. **Monitor Visualization**: Watch the dynamic representation of algorithm state
+4. **Send Requests**: Test the algorithm behavior by sending requests
+5. **Observe Differences**: Switch between algorithms to compare their behaviors
+6. **Experiment**: Try different configurations to understand rate limiting concepts
+
+### Usage Tips
+- **Token Bucket**: Start with high capacity for burst testing, then reduce for steady-state behavior
+- **Leaky Bucket**: Observe how requests queue up and are processed at a constant rate
+- **Comparison**: Use similar parameters for both algorithms to see their different behaviors
 
 ## 🔮 Future Enhancements
 
 This application is designed to be extensible with additional throttling algorithms:
-- **Leaky Bucket Algorithm**
 - **Fixed Window Counter**
 - **Sliding Window Log**
 - **Sliding Window Counter**
+- **Adaptive Rate Limiting**
 
 ---

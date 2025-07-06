@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Throttling Algorithm Visualizer</title>
+    <!-- Inter font from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./index.css">
+</head>
+
+<body class="antialiased">
+    <div class="container">
+        <div class="header">
+            <h1 class="main-title">Throttling Algorithm Visualizer</h1>
+        </div>
+
+        <div class="algorithm-grid">
+            <div class="algorithm-card" data-algorithm="token-bucket">
+                <div class="algorithm-icon">🪣</div>
+                <h2 class="algorithm-title">Token Bucket</h2>
+                <div class="algorithm-features">
+                    <div class="feature">✨ Burst Traffic Support</div>
+                    <div class="feature">🔄 Constant Refill Rate</div>
+                    <div class="feature">📊 Token Visualization</div>
+                </div>
+                <button class="btn btn-primary" onclick="selectAlgorithm('token-bucket')">
+                    Visualize Token Bucket
+                </button>
+            </div>
+
+            <div class="algorithm-card" data-algorithm="leaky-bucket">
+                <div class="algorithm-icon">🪣</div>
+                <h2 class="algorithm-title">Leaky Bucket</h2>
+                <div class="algorithm-features">
+                    <div class="feature">🌊 Smooth Traffic Flow</div>
+                    <div class="feature">⏱️ Constant Processing Rate</div>
+                    <div class="feature">📈 Queue Visualization</div>
+                </div>
+                <button class="btn btn-secondary" onclick="selectAlgorithm('leaky-bucket')">
+                    Visualize Leaky Bucket
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="./index.js"></script>
+</body>
+
+</html> 

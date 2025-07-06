@@ -3,12 +3,36 @@ body {
     font-family: 'Inter', sans-serif;
     background-color: #f0f4f8;
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
+    flex-direction: column;
+    align-items: center;
     min-height: 100vh;
     padding: 2rem;
     box-sizing: border-box;
     margin: 0;
+    gap: 1rem;
+}
+
+.navigation {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.back-link {
+    color: #6b7280;
+    text-decoration: none;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.back-link:hover {
+    color: #3b82f6;
+    text-decoration: underline;
 }
 
 .container {
@@ -18,7 +42,6 @@ body {
     padding: 2.5rem;
     width: 100%;
     max-width: 900px;
-    height: 100%;
     display: flex;
     flex-direction: column;
     gap: 2rem;
@@ -95,7 +118,7 @@ body {
     transform: translateY(-1px);
 }
 
-.token-bucket-visualizer {
+.algorithm-visualizer {
     background-color: #e5e7eb;
     border-radius: 0.75rem;
     height: 30px;
@@ -105,12 +128,21 @@ body {
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
 }
 
-.token-fill {
-    background-color: #10b981;
+.algorithm-fill {
     height: 100%;
     width: 0%;
     transition: width 0.3s ease-out;
     border-radius: 0.75rem;
+}
+
+/* Token Bucket visualization (green) */
+.algorithm-fill.token-bucket {
+    background-color: #10b981;
+}
+
+/* Leaky Bucket visualization (blue) */
+.algorithm-fill.leaky-bucket {
+    background-color: #3b82f6;
 }
 
 .log-area {
@@ -155,6 +187,16 @@ body {
     border: 1px solid #bfdbfe;
 }
 
+.status-info.token-bucket {
+    background-color: #ecfdf5;
+    border-color: #a7f3d0;
+}
+
+.status-info.leaky-bucket {
+    background-color: #eff6ff;
+    border-color: #bfdbfe;
+}
+
 .section-title {
     font-size: 1.5rem;
     font-weight: 700;
@@ -195,3 +237,27 @@ body {
         width: auto;
     }
 }
+
+/* Algorithm specific colors */
+.token-bucket-theme {
+    --primary-color: #10b981;
+    --primary-light: #ecfdf5;
+    --primary-border: #a7f3d0;
+}
+
+.leaky-bucket-theme {
+    --primary-color: #3b82f6;
+    --primary-light: #eff6ff;
+    --primary-border: #bfdbfe;
+}
+
+/* Animation for visual feedback */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+.algorithm-fill.updating {
+    animation: pulse 0.5s ease-in-out;
+} 
